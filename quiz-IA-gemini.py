@@ -16,9 +16,7 @@ class Pergunta(BaseModel):
 
 
 console = Console()
-
 load_dotenv()
-
 client = genai.Client()
 
 
@@ -64,7 +62,11 @@ def gerar_quiz():
 
     while continuar.lower() != "n":
         with console.status("[bold green]Gerando pergunta...", spinner="dots"):
-            pergunta = gerar_pergunta(topico)
+            pergunta = []
+            if pergunta == []:
+                pergunta = gerar_pergunta(topico)
+            else:
+                topico = f"faça uma pergunta diferente de {pergunta['enunciado']} sobre o mesmo ({topico})"
 
         opcoes = pergunta["opcoes"]
 
@@ -97,7 +99,7 @@ def gerar_quiz():
                 f"A resposta certa é: [bold green]{resposta_certa}[/bold green].")
         continuar = Prompt.ask(
             prompt="Deseja continuar?",
-            choices=["S", "n"]
+            choices=["s", "n"]
         )
 
     console.print(topico, style="bold blue")
